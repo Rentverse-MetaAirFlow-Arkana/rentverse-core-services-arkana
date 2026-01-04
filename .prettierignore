@@ -1,0 +1,16 @@
+node_modules
+dist
+build
+coverage
+.env*
+*.log
+.DS_Store
+prisma/migrations
+uploads/
+*.min.js
+.nyc_output/
+logs/
+Thumbs.db
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
