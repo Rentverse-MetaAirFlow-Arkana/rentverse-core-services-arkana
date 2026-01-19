@@ -28,6 +28,14 @@ router.post(
 
 router.put('/:id', auth, propertiesController.updateProperty);
 
+router.patch('/:id/status', 
+  auth,
+  [
+    body('status').isIn(['PENDING_REVIEW', 'APPROVED', 'REJECTED']).withMessage('Status must be PENDING_REVIEW, APPROVED, or REJECTED')
+  ],
+  propertiesController.updatePropertyStatus
+);
+
 router.delete('/:id', auth, propertiesController.deleteProperty);
 
 // Landlord endpoints

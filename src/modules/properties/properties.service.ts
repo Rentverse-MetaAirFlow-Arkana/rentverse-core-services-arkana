@@ -620,4 +620,35 @@ export class PropertiesService {
       },
     };
   }
+
+  /**
+   * Update property status
+   */
+  async updatePropertyStatus(id: string, status: 'PENDING_REVIEW' | 'APPROVED' | 'REJECTED', userId: string, userRole: string) {
+    // Check if property exists and get owner info
+    const [existingProperty] = await db
+      .select()
+      .from(properties)
+      .where(eq(properties.id, id));
+
+    if (!existingProperty) {
+      throw new Error('Property not found');
+    }
+
+    // Check permissions: owner can update their property, admin can update any
+    if (userRole !== 'ADMIN' && existingProperty.ownerId !== userId) {
+      throw new Error('You do not have permission to update this property status');
+    }
+
+    const [property] = await db
+      .update(properties)
+      .set({ 
+        status,
+        updatedAt: new Date()
+      })
+      .where(eq(properties.id, id))
+      .returning();
+
+    return property;
+  }
 }
